@@ -30,23 +30,14 @@ Window {
                 height: width
                 text: number
                 onSwap: {
-                    if(indSwap > 0 && theModel.get(index-1).number === 16) {
-                        Func.moveLeft(indSwap);
-                    } else if(indSwap < 15 && theModel.get(index+1).number === 16) {
-                        Func.moveRight(indSwap);
-                    } else if(indSwap > 3 && theModel.get(index-4).number === 16) {
-                        Func.moveUp(indSwap);
-                    } else if(indSwap < 12 && theModel.get(index+4).number === 16) {
-                        Func.moveDown(indSwap);
-                    }
+                    Func.move(indSwap, theModel, index)
                     if(theModel.get(15).number === 16) {
-                        if(Func.checkWin()) {
+                        if(Func.checkWin(theModel)) {
                             win.visible = true
                         }
                     }
                 }
             }
-
             move: Transition {
                 NumberAnimation { properties: "x,y"; duration: 500 }
             }
@@ -74,11 +65,9 @@ Window {
         anchors.top: wraper.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         onClicked: {
-            Func.mixNumbers();
-            while(Func.checkLoss()) {
-                Func.mixNumbers();
-                console.log("mix")
-            }
+            do {
+                Func.mixNumbers(theModel);
+            } while(Func.checkLoss(theModel))
             win.visible = false
         }
         background: Rectangle {
